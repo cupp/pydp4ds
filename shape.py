@@ -44,7 +44,7 @@ class NullShape(AShape):
     
     def scale(self, factor: float) -> None:
         # Exercise for the student
-        pass
+        raise ValueError('scale: Exercise for the student.')
 
     def prompt_and_set_dimensions(self) -> None:
         pass
@@ -56,7 +56,7 @@ class Line(AShape):
         self.length = length
 
     def __repr__(self) -> str:
-        return 'Line\nLength: {self.length}\n'
+        return f'Line\nLength: {self.length}\n'
 
     def area(self) -> float:  
         return 0.0
@@ -73,34 +73,7 @@ class Line(AShape):
 
 ### LOCAL FUNCTIONS ###
 
-def initialize(shapes: List[AShape], cap: int) -> None:
-    for i in range(cap):
-        shapes.append(NullShape())
-
-def prompt_loop(shapes: List[AShape], cap: int) -> None:
-    response = ''
-    while response != 'Q':
-        print(f'There are [0..] {cap - 1} shapes.')
-        response = input('(m)ake  (c)lear  (a)rea  (p)erimeter  (s)cale  (d)isplay  (q)uit: ').upper()
-        match response:
-            case 'M':
-                make_shape(shapes[prompt_int_between('Which shape?', 0, cap - 1)])
-            case 'C':
-                clear_shape(shapes[prompt_int_between('Which shape?', 0, cap - 1)])
-            case 'A':
-                print_area(shapes[prompt_int_between("Which shape?", 0, cap - 1)])
-            case 'P':
-                print_perimeter(shapes[prompt_int_between("Which shape?", 0, cap - 1)])
-            case 'S':
-                scale_shape(shapes[prompt_int_between("Which shape?", 0, cap - 1)])
-            case 'D':
-                display_shape(shapes[prompt_int_between("Which shape?", 0, cap - 1)])
-            case 'Q':
-                pass
-            case _:
-                print('\nIllegal command.\n')
-
-def make_shape(sh: AShape) -> None:
+def make_shape() -> AShape:
     match shape_type():
         case 'L':
             sh = Line()
@@ -116,6 +89,7 @@ def make_shape(sh: AShape) -> None:
         case _:
             pass
     sh.prompt_and_set_dimensions()
+    return sh
 
 def shape_type() -> str:
     ch = input('(l)ine  (r)ectangle  (c)ircle  right(t)riangle  (m)ystery: ').upper()
@@ -123,35 +97,40 @@ def shape_type() -> str:
         ch = input('Must be l, r, c, t, or m.  Which type? ').upper()
     return ch
 
+
+def display_shape(sh: AShape):
+    print(f'sh.length = {sh.length}')
+
+    print()
+    print(sh)
+
 if __name__ == '__main__':
     NUM_SHAPES = 5
     shapes = []
-    initialize(shapes, NUM_SHAPES)
-    prompt_loop(shapes, NUM_SHAPES)
-
-
-
-
-
-# void clearShape(AShape *&sh) {
-#     delete sh;
-#     sh = new NullShape;
-# }
-
-# void printArea(AShape *sh) {
-#     cout << "\nArea: " << sh->area() << endl;
-# }
-
-# void printPerimeter(AShape *sh) {
-#     cout << "\nPerimeter: " << sh->perimeter() << endl;
-# }
-
-# void scaleShape(AShape *sh) {
-#     sh->scale(promptDoubleGE("Scale factor?", 0.0));
-# }
-
-# void displayShape(AShape *sh) {
-#     cout << endl;
-#     sh->display(cout);
-# }
-
+    for i in range(NUM_SHAPES):
+        shapes.append(NullShape())
+    response = ''
+    while response != 'Q':
+        print(f'There are [0..{NUM_SHAPES - 1}] shapes.')
+        response = input('(m)ake  (c)lear  (a)rea  (p)erimeter  (s)cale  (d)isplay  (q)uit: ').upper()
+        if response in 'MCAPSD':
+            idx = prompt_int_between('Which shape?', 0, NUM_SHAPES - 1)
+        match response:
+            case 'M':
+                shapes[idx] = make_shape()
+            case 'C':
+                shapes[idx] = NullShape()
+            case 'A':
+                print(f'\nArea: {shapes[idx].area()}\n')
+            case 'P':
+                print(f'\nPerimeter: {shapes[idx].perimeter()}\n')
+            case 'S':
+                factor = prompt_float_ge('Scale factor?', 0.0)
+                shapes[idx].scale(factor)
+            case 'D':
+                print()
+                print(shapes[idx])
+            case 'Q':
+                pass
+            case _:
+                print('\nIllegal command.\n')
