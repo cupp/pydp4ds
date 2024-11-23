@@ -1,8 +1,9 @@
-# # File: Shape/ShapeMain.py
+# File: shape.py
 
 from abc import *
 from typing import *
 from utilities import *
+import math
 
 
 class AShape(ABC):
@@ -43,7 +44,6 @@ class NullShape(AShape):
         return 0.0
     
     def scale(self, factor: float) -> None:
-        # Exercise for the student
         raise ValueError('scale: Exercise for the student.')
 
     def prompt_and_set_dimensions(self) -> None:
@@ -65,11 +65,75 @@ class Line(AShape):
         return self.length
 
     def scale(self, factor: float) -> None:
-       raise ValueError('scale: Exercise for the student.')
+        raise ValueError('scale: Exercise for the student.')
 
     def prompt_and_set_dimensions(self) -> None:
         self.length = prompt_float_ge("Length?", 0.0)
 
+class Rectangle(AShape):
+    def __init__(self, length: float=0.0, width: float=0.0):
+        if length < 0.0 or width < 0.0:
+            raise ValueError('Rectangle precondition violated: length and width cannot be negative.')
+        self.length = length
+        self.width = width
+
+    def __repr__(self) -> str:
+        return 'Rectangle\nLength: {self.length}\nWidth: {self.width}\n'
+
+    def area(self) -> float:
+        return self.length * self.width
+
+    def perimeter(self) -> float:
+        return 2.0 * (self.length + self.width)
+
+    def scale(self, factor: float) -> None:
+        raise ValueError('scale: Exercise for the student.')
+
+    def prompt_and_set_dimensions(self) -> None:
+        self.length = prompt_float_ge("Length?", 0.0)
+        self.width = prompt_float_ge("Width?", 0.0)
+
+class Circle(AShape):
+    def __init__(self, radius: float=0.0):  
+        if radius < 0.0:
+            raise ValueError('Circle precondition violated: radius cannot be negative.')
+        self.radius = radius
+
+    def __repr__(self) -> str:
+        return f'Circle\nRadius: {self.radius}\n'
+
+    def area(self) -> float:  
+        return math.pi * self.radius ** 2
+
+    def perimeter(self) -> float:  
+        return 2.0 * math.pi * self.radius;
+
+    def scale(self, factor: float) -> None:  
+        raise ValueError('scale: Exercise for the student.')
+
+    def prompt_and_set_dimensions(self) -> None:
+        self.radius = prompt_float_ge("Radius?", 0.0)
+
+class RightTriangle(AShape):
+    def __init__(self, base: float, height: float):
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+    def __repr__(self):
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+    def area(self) -> float:
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+    def perimeter(self) -> float:
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+    def scale(self, factor: float) -> None:
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+    def prompt_and_set_dimensions(self) -> None:
+        raise ValueError('RightTriangle: Exercise for the student.')
+
+# MysteryShape class (Exercise for the student)
 
 ### LOCAL FUNCTIONS ###
 
