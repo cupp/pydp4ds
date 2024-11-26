@@ -1,5 +1,7 @@
 # File: utilities.py
 
+import re
+
 PI = 3.1415926535898
 
 def prompt_float_ge(prompt: str, limit: float) -> float:
@@ -60,3 +62,7 @@ def abs(i: int) -> int:
     """Post: The absolute value of i is returned."""
 
     return i if 0 <= i else -i
+
+def prompt_list(dtype=int) -> list:
+    x = input('Enter list of values separated by spaces: ')
+    return [dtype(val) for val in re.split('\\s+', x)]
